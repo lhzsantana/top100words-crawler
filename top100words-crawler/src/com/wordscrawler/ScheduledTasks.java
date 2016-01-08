@@ -13,7 +13,8 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 
 @Component
 public class ScheduledTasks {
-	
+
+
 	final static Logger logger = Logger.getLogger(ScheduledTasks.class);
 	
     @Scheduled(fixedRate = 50000000)
@@ -51,20 +52,21 @@ public class ScheduledTasks {
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
         RobotstxtServer robotstxtServer = new RobotstxtServer(robotstxtConfig, pageFetcher);
-        CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
+        
+        CrawlController controllerBrazil = new CrawlController(config, pageFetcher, robotstxtServer);
+        controllerBrazil.addSeed("http://www.globo.com/");
+        controllerBrazil.start(MyCrawler.class, numberOfCrawlers);
 
-        /*
-         * For each crawl, you need to add some seed urls. These are the first
-         * URLs that are fetched and then the crawler starts following links
-         * which are found in these pages
-         */
-        controller.addSeed("http://www.globo.com/");
-
-        /*
-         * Start the crawl. This is a blocking operation, meaning that your code
-         * will reach the line after this only when crawling is finished.
-         */
-        controller.start(MyCrawler.class, numberOfCrawlers);
- 
+        CrawlController controllerDeutschland = new CrawlController(config, pageFetcher, robotstxtServer);
+        controllerDeutschland.addSeed("http://www.spiegel.de/");
+        controllerDeutschland.start(MyCrawler.class, numberOfCrawlers);
+        
+        CrawlController controllerFrance = new CrawlController(config, pageFetcher, robotstxtServer);
+        controllerFrance.addSeed("http://www.lemonde.fr/");
+        controllerFrance.start(MyCrawler.class, numberOfCrawlers);
+        
+        CrawlController controllerEspana = new CrawlController(config, pageFetcher, robotstxtServer);
+        controllerEspana.addSeed("http://www.lanacion.com.ar/");
+        controllerEspana.start(MyCrawler.class, numberOfCrawlers);
     }
 }

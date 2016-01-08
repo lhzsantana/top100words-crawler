@@ -1,9 +1,11 @@
 package com.wordscrawler.crawler;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.wordscrawler.counter.Counter;
 
@@ -14,6 +16,9 @@ import edu.uci.ics.crawler4j.url.WebURL;
 
 public class MyCrawler extends WebCrawler {	
 
+    @Autowired
+    private Counter counter;
+    
 	final static Logger logger = Logger.getLogger(WebCrawler.class);
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
@@ -50,7 +55,11 @@ public class MyCrawler extends WebCrawler {
              String html = htmlParseData.getHtml();
              Set<WebURL> links = htmlParseData.getOutgoingUrls();
              
-             
+             try {
+				counter.index(text, url);
+			} catch (IOException e) {
+				logger.error(e);
+			}
              
              logger.info("Text length: " + text.length());
              logger.info("Html length: " + html.length());
