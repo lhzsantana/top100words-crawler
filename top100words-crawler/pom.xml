@@ -43,7 +43,5 @@
 			<artifactId>lucene-misc</artifactId>
 			<version>4.0.0-BETA</version>
 		</dependency>
-
-
 	</dependencies>
 </project>
